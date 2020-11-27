@@ -1,4 +1,4 @@
-package files
+package filer
 
 import (
 	"encoding/json"
@@ -55,13 +55,12 @@ func Write(data interface{}, fileName string, format string, dir string) error {
 	return nil
 }
 
-func Read(readChan chan []byte, stopChan chan bool,  fileName string, format string, dir string) error {
+func Read(readChan chan []byte, stopChan chan bool, fileName string, format string, dir string) error {
 	if fileName == "" {
 		return errors.New("file name should be specified")
 	}
 	lockers[fileName].RLock()
 	defer lockers[fileName].RUnlock()
-
 
 	if dir == "" {
 		dir = downloadPath
@@ -89,6 +88,6 @@ func Read(readChan chan []byte, stopChan chan bool,  fileName string, format str
 		//}
 		//(*stream).Send(data)
 	}
-	stopChan<-true
+	stopChan <- true
 	return nil
 }
